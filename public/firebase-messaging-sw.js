@@ -1,7 +1,12 @@
-importScripts('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js')
-importScripts('https://www.gstatic.com/firebasejs/10.13.1/firebase-messaging.js')
+/* eslint-env serviceworker */
+/* global firebase */
 
+// Importar Firebase en el contexto de Service Worker
 
+importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
+
+// Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyD031RSgXWcwImo5lo8SYBBJb3LAjMWA48",
     authDomain: "fir-conectando.firebaseapp.com",
@@ -12,6 +17,21 @@ const firebaseConfig = {
     measurementId: "G-DXM1VF2DCS"
   };
 
-  firebase.initializeApp(firebaseConfig)
+// Inicializa Firebase en el contexto del Service Worker
+firebase.initializeApp(firebaseConfig);
 
-  const messaging = firebase.messaging();
+// Inicializa el servicio de mensajería
+const messaging = firebase.messaging();
+
+// Maneja los mensajes recibidos en segundo plano
+messaging.onBackgroundMessage(function(payload) {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = 'Background Message Title';
+    const notificationOptions = {
+      body: 'Background Message body.'
+    };
+  
+    registration.showNotification(notificationTitle,
+      notificationOptions);
+  });
